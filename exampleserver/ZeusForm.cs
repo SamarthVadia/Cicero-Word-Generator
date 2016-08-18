@@ -179,16 +179,18 @@ namespace Zeus
             //3: Update hardware channel table
             hardwareTable.Rows.Clear();
             byte[] data = new byte[128];
-            _selectedDevice.ReadFeatureData(out data, 0);
-            //Populate the table
-            foreach (HardwareChannelRule rule in server.serverSettings.Rules)
+            if (_selectedDevice != null)
             {
-                hardwareTable.Rows.Add(rule.ChannelName, rule.InputPin, data[rule.InputPin + 1]);
+                _selectedDevice.ReadFeatureData(out data, 0);
+                //Populate the table
+                foreach (HardwareChannelRule rule in server.serverSettings.Rules)
+                {
+                    hardwareTable.Rows.Add(rule.ChannelName, rule.InputPin, data[rule.InputPin + 1]);
+                }
+
+
+                relockLabel.Text = server.responsesTried.ToString() + "/" + server.serverSettings.NumberOfRelocks.ToString();
             }
-
-
-            relockLabel.Text = server.responsesTried.ToString() + "/" + server.serverSettings.NumberOfRelocks.ToString();
-
         }
 
         private void configureToolStripMenuItem_Click(object sender, EventArgs e)
